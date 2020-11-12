@@ -1,7 +1,9 @@
 import 'package:url_launcher/url_launcher.dart';
 
 class Auth {
-  Future<void> signInWithGihub() async {
+
+  Future<bool> signInWithGihub() async {
+    
     String clientId = '4e6c090ef94aeea57d25';
     String url = "https://github.com/login/oauth/authorize" +
         "?client_id=" +

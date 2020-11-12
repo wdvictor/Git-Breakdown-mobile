@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -25,11 +26,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Auth _auth;
+  Auth auth;
 
   @override
   void initState() {
-    _auth = Auth();
+    auth = Auth();
     super.initState();
   }
 
@@ -41,35 +42,70 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Container(
-        constraints: BoxConstraints.expand(),
         child: Column(
           children: [
             Expanded(
-              child: Container(),
+              flex: 3,
+              child: Container(
+                decoration: BoxDecoration(),
+                alignment: Alignment.center,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                  child: Text(
+                    'Git Breakdown',
+                    style: TextStyle(fontSize: 28, color: Colors.white),
+                  ),
+                ),
+              ),
             ),
             Expanded(
-                child: Row(
-              children: [
-                Expanded(
-                  flex: 3,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                child: Container(
                   child: FlatButton(
-                    onPressed: () => _auth.signInWithGihub(),
+                    onPressed: () => auth.signInWithGihub(),
                     child: Container(
-                      
-                      child: Text('Login with Github'),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Text(
+                                  'Login with Hithub',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Image.network(
+                                  'https://img.icons8.com/fluent/48/000000/github.png'),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Image.network(
-                      'https://img.icons8.com/fluent/48/000000/github.png'),
-                )
-              ],
-            )),
+              ),
+            ),
             Expanded(
+              flex: 3,
               child: Container(),
-            )
+            ),
           ],
         ),
       ),
