@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "814533732176",
+    "firebase_url": "https://git-breakdown-mobile.firebaseio.com",
+    "project_id": "git-breakdown-mobile",
+    "storage_bucket": "git-breakdown-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814533732176:android:a490359e4fc865851d6e55",
+        "android_client_info": {
+          "package_name": "com.gbd.gitbreakdownmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814533732176-g10gcc37hhj43t07o9lf72nka5k8vgv0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsu6mbCjderSD_v4QQRr1579LvCEHL0Vk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814533732176-g10gcc37hhj43t07o9lf72nka5k8vgv0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
