@@ -1,20 +1,34 @@
-import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
+import 'package:gbdmobile/Models/githubLoginRequest.dart';
+import 'package:gbdmobile/Models/githubLoginResponse.dart';
+import 'package:gbdmobile/secret_keys.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
-class Auth {
+class AuthService {
 
-  Future<bool> signInWithGihub() async {
-    
-    String clientId = '4e6c090ef94aeea57d25';
-    String url = "https://github.com/login/oauth/authorize" +
-        "?client_id=" +
-        clientId +
-        "&scope=public_repo%20read:user%20user:email";
+  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
 
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: false, forceWebView: false);
-      return true;
-    } else {
-      return false;
-    }
+  Future<auth.User> loginWithGitHub(String code) async {
+    final http.Response response = await http.post(
+      "https://github.com/login/oauth/access_token",
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(
+        GithubLoginRequest(
+            clientId: CLIENT_ID, clientSecret: CLIENT_SECRET, code: code),
+      ),
+    );
+
+    GithubLoginResponse loginResponse = GithubLoginResponse.fromJson(
+      json.decode(response.body),
+    );
+
+    final auth.AuthCredential credential =
+        auth.GithubAuthProvider.credential(loginResponse.accessToken);
+
+    final auth.UserCredential userCredential =
+        await _firebaseAuth.signInWithCredential(credential);
+    final auth.User user = userCredential.user;
+    return user;
   }
 }
