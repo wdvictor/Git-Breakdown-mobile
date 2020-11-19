@@ -1,10 +1,14 @@
-
 import 'package:flutter/material.dart';
 
-class User {
+class GbdUser {
   final String clientToken;
- 
- User({@required this.clientToken});
+  final String displayName;
+  final String email;
+  final String photoUrl;
 
-
+  GbdUser(
+      {@required this.clientToken,
+      @required this.displayName,
+      @required this.email,
+      @required this.photoUrl});
 }

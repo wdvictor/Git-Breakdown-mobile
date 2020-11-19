@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
+import 'package:gbdmobile/ui/profile.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,6 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
+    
     super.initState();
   }
 
@@ -19,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    AuthService.verifyLoggedUser(context: context);
     
     return Scaffold(
       backgroundColor: Colors.black,
@@ -50,8 +54,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: Container(
                   child: FlatButton(
                     onPressed: () {
-                       bool resp = AuthService.githubAuth(context: context);
-                       print(resp);
+                      bool resp = AuthService.githubAuth(context: context);
+                      print(resp);
                     },
                     child: Container(
                       constraints: BoxConstraints.expand(),

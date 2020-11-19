@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gbdmobile/bloc/ui/login.dart';
+import 'package:gbdmobile/ui/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() {
@@ -15,11 +15,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FutureBuilder(
-        future: Firebase.initializeApp(),
-        builder: (context, snapshot) {
-          return LoginPage();
-        }
+      home: Scaffold(
+        body: Container(
+          child: FutureBuilder(
+              future: Firebase.initializeApp(),
+              builder: (context, snapshot) {
+                return LoginPage();
+              }),
+        ),
       ),
     );
   }
