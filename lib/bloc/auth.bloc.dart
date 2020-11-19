@@ -1,34 +1,24 @@
-import 'dart:convert';
-import 'package:gbdmobile/Models/githubLoginRequest.dart';
-import 'package:gbdmobile/Models/githubLoginResponse.dart';
-import 'package:gbdmobile/secret_keys.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flutter/widgets.dart';
+import 'package:gbdmobile/secret_keys.dart' as SecretKey;
+import 'package:github_auth/github_auth.dart';
 
 class AuthService {
+  static bool githubAuth({@required BuildContext context}) {
+    try {
+      final auth = GithubAuth(
+        clientId: SecretKey.CLIENT_ID,
+        clientSecret: SecretKey.CLIENT_SECRET,
+        callbackUrl: 'https://git-breakdown-mobile.firebaseapp.com/__/auth/handler',
+      );
 
-  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
-
-  Future<auth.User> loginWithGitHub(String code) async {
-    final http.Response response = await http.post(
-      "https://github.com/login/oauth/access_token",
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(
-        GithubLoginRequest(
-            clientId: CLIENT_ID, clientSecret: CLIENT_SECRET, code: code),
-      ),
-    );
-
-    GithubLoginResponse loginResponse = GithubLoginResponse.fromJson(
-      json.decode(response.body),
-    );
-
-    final auth.AuthCredential credential =
-        auth.GithubAuthProvider.credential(loginResponse.accessToken);
-
-    final auth.UserCredential userCredential =
-        await _firebaseAuth.signInWithCredential(credential);
-    final auth.User user = userCredential.user;
-    return user;
+      
+      auth.login(context).then((value) {
+        print('(SYS) token' + value.token.toString());
+      });
+      return true;
+    } catch (error) {
+      print('(SYS) error' + error.toString());
+      return false;
+    }
   }
 }
