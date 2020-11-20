@@ -11,10 +11,9 @@ environment:
 dependencies:
   firebase_auth: ^0.18.3
   firebase_core: ^0.5.2
-  url_launcher: ^5.7.10
-  uni_links: ^0.4.0
-  http: ^0.12.2
-  
+  github_auth: ^0.0.4
+  cloud_firestore: ^0.14.3
+  path_provider: ^1.1.0
  
 
   flutter:
