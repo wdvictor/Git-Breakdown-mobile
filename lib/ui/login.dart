@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
-import 'package:gbdmobile/ui/profile.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,9 +7,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   @override
   void initState() {
-    
     super.initState();
   }
 

@@ -1,12 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gbdmobile/Models/user.dart';
 import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/secret_keys.dart' as SecretKey;
-import 'package:gbdmobile/ui/profile.dart';
 import 'package:github_auth/github_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AuthService {
 
@@ -20,7 +23,7 @@ class AuthService {
       );
 
       githubAuth.login(context).then((value) {
-       
+        saveData(token: value.token);
         createFirebaseUser(token: value.token);
       });
       return true;
@@ -38,13 +41,6 @@ class AuthService {
       final auth.UserCredential userCredential =
           await auth.FirebaseAuth.instance.signInWithCredential(credential);
 
-      //TODO: a gente precisa de uma forma de salvar o token do usuário. Depois q ele faz login
-      // não encontrei uma forma de achar ele via currentUser. Aqui eu tentei salvar ele usando
-      // no cloud_firestore, porem um erro está aconteçendo.
-      print('creating user');
-      CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
-      usersRef.doc().set({'token' : token});
-
       LoggedUser.user = GbdUser(
           clientToken: token,
           photoUrl: userCredential.user.photoURL,
@@ -60,9 +56,6 @@ class AuthService {
     }
   }
 
-
-
-
   ///Essa função vai ser chamada no login para ver se o usuário já está autenticado,
   ///caso sim, ele redirecionada para o profile (gente muda de arquivo depois)
   static Future<void> verifyLoggedUser({@required BuildContext context}) async {
@@ -71,16 +64,43 @@ class AuthService {
     if (user != null) {
       print('(SYS) user is not null\n\n');
 
-      
-      // LoggedUser.user = GbdUser(
-      //   clientToken: 
-      // );
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => Profile(),
-      //   ),
-      // );
+      /*LoggedUser.user = GbdUser(
+        clientToken:
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Profile(),
+        ),
+      );*/
+    }
+    /*AuthService.readData().then((data) {
+        json.decode(data);
+    });*/
+  }
+
+  //TODO: extrair essas 3 funções para um arquivo apropriado
+  static Future<File> _getFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    print("${directory.path}/data.json");
+    return File("${directory.path}/data.json");
+  }
+
+  static Future<File> saveData({@required token}) async {
+    String data = json.encode(token);
+
+    final file = await _getFile();
+    return file.writeAsString(data);
+  }
+
+  static Future<String> readData() async {
+    try {
+      final file = await _getFile();
+
+      return file.readAsString();
+    } catch (e) {
+      return null;
     }
   }
+
 }
