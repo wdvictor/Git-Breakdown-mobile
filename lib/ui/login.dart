@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
+import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
+
+import '../bloc/LoggedUser.dart';
+import '../bloc/auth.bloc.dart';
+import '../bloc/auth.bloc.dart';
+import '../bloc/auth.bloc.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -7,7 +13,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   @override
   void initState() {
     super.initState();
@@ -20,8 +25,18 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    AuthService.verifyLoggedUser(context: context);
-    
+    AuthService.readData().then(
+      (fileString) {
+        ///The [readData] function return null if no file exist.
+        if (fileString != null) {
+          AuthService.createFirebaseUser(
+              token: fileString.replaceAll(RegExp('"'), ''));
+        }
+      },
+    );
+
+    ReposRequest.getUserRepos();
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
@@ -51,9 +66,8 @@ class _LoginPageState extends State<LoginPage> {
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
                 child: Container(
                   child: FlatButton(
-                    onPressed: () {
-                      bool resp = AuthService.githubAuth(context: context);
-                      print(resp);
+                    onPressed: () async {
+                      AuthService.githubAuth(context: context);
                     },
                     child: Container(
                       constraints: BoxConstraints.expand(),
