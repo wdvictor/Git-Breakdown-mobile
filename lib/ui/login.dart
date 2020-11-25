@@ -3,10 +3,6 @@ import 'package:gbdmobile/bloc/auth.bloc.dart';
 import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
 import 'package:gbdmobile/ui/reposList.dart';
 
-import '../bloc/LoggedUser.dart';
-import '../bloc/auth.bloc.dart';
-import '../bloc/auth.bloc.dart';
-import '../bloc/auth.bloc.dart';
 
 class LoginPage extends StatefulWidget {
   @override
