@@ -12,6 +12,11 @@ import 'package:github_auth/github_auth.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AuthService {
+
+
+  ///This function create the login url and send a request to github to
+  ///authenticate the user. Then will be create the file of the user to hold the token, and the firebase user
+  ///in case of non-existent user.
   static Future<bool> githubAuth({@required BuildContext context}) async {
     try {
       final githubAuth = GithubAuth(
@@ -58,7 +63,6 @@ class AuthService {
   }
 
 
-  //TODO: extrair essas 3 funções para um arquivo apropriado
   static Future<File> _getFile() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
@@ -71,6 +75,8 @@ class AuthService {
     }
   }
 
+
+  ///This function take the token and save into a file to use later.
   static Future<File> saveData({@required token}) async {
     String data = json.encode(token);
 
@@ -78,6 +84,9 @@ class AuthService {
     return file.writeAsString(data);
   }
 
+
+  ///This functions get's the file and return it as a string. Returns null in
+  ///case if non-existent file.
   static Future<String> readData() async {
     try {
       final file = await _getFile();

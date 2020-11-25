@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
 import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
+import 'package:gbdmobile/ui/reposList.dart';
 
 import '../bloc/LoggedUser.dart';
 import '../bloc/auth.bloc.dart';
@@ -30,12 +31,21 @@ class _LoginPageState extends State<LoginPage> {
         ///The [readData] function return null if no file exist.
         if (fileString != null) {
           AuthService.createFirebaseUser(
-              token: fileString.replaceAll(RegExp('"'), ''));
+            token: fileString.replaceAll(RegExp('"'), ''),
+          );
+          ReposRequest.getUserRepos().then(
+            (repos) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReposList(
+                  reposList: repos,
+                ),
+              ),
+            ),
+          );
         }
       },
     );
-
-    ReposRequest.getUserRepos();
 
     return Scaffold(
       backgroundColor: Colors.black,
