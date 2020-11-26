@@ -3,6 +3,7 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../Git-Breakdown-mobile/gen" />
         <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../Git-Breakdown-mobile/gen" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../Git-Breakdown-mobile/AndroidManifest.xml" />
@@ -24,6 +25,7 @@
     <orderEntry type="jdk" jdkName="Android API 28 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Flutter Plugins" level="project" />
     <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
 </module>
