@@ -1,5 +1,7 @@
 
 secret_keys.dart
+.flutter-plugins
+.flutter-plugins-dependencies
 
 ### Dart ###
 # See https://www.dartlang.org/guides/libraries/private-files

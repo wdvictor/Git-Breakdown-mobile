@@ -13,7 +13,11 @@ import 'package:path_provider/path_provider.dart';
 
 class AuthService {
 
-  static bool githubAuth({@required BuildContext context}) {
+
+  ///This function create the login url and send a request to github to
+  ///authenticate the user. Then will be create the file of the user to hold the token, and the firebase user
+  ///in case of non-existent user.
+  static Future<bool> githubAuth({@required BuildContext context}) async {
     try {
       final githubAuth = GithubAuth(
         clientId: SecretKey.CLIENT_ID,
@@ -40,8 +44,10 @@ class AuthService {
 
       final auth.UserCredential userCredential =
           await auth.FirebaseAuth.instance.signInWithCredential(credential);
-
+      
+      
       LoggedUser.user = GbdUser(
+          userName: userCredential.additionalUserInfo.username,
           clientToken: token,
           photoUrl: userCredential.user.photoURL,
           email: userCredential.user.email,
@@ -56,36 +62,21 @@ class AuthService {
     }
   }
 
-  ///Essa função vai ser chamada no login para ver se o usuário já está autenticado,
-  ///caso sim, ele redirecionada para o profile (gente muda de arquivo depois)
-  static Future<void> verifyLoggedUser({@required BuildContext context}) async {
-    auth.User user = auth.FirebaseAuth.instance.currentUser;
-    
-    if (user != null) {
-      print('(SYS) user is not null\n\n');
 
-      /*LoggedUser.user = GbdUser(
-        clientToken:
-      );
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Profile(),
-        ),
-      );*/
-    }
-    /*AuthService.readData().then((data) {
-        json.decode(data);
-    });*/
-  }
-
-  //TODO: extrair essas 3 funções para um arquivo apropriado
   static Future<File> _getFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    print("${directory.path}/data.json");
-    return File("${directory.path}/data.json");
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      return File("${directory.path}/data.json");
+    } catch (err) {
+      print(
+        '(SYS) error: ' + err.toString(),
+      );
+      return null;
+    }
   }
 
+
+  ///This function take the token and save into a file to use later.
   static Future<File> saveData({@required token}) async {
     String data = json.encode(token);
 
@@ -93,14 +84,20 @@ class AuthService {
     return file.writeAsString(data);
   }
 
+
+  ///This functions get's the file and return it as a string. Returns null in
+  ///case if non-existent file.
   static Future<String> readData() async {
     try {
       final file = await _getFile();
-
-      return file.readAsString();
+      
+      if(await file.exists())
+        return file.readAsString();
+      else
+        return null;
+      
     } catch (e) {
       return null;
     }
   }
-
 }
