@@ -9,6 +9,18 @@ class CommitsPage extends StatefulWidget {
 }
 
 class _CommitsPageState extends State<CommitsPage> {
+  ///Return Red to bad status, blue to medium status, and green to
+  ///good status based on user percent
+  MaterialColor getColor({@required num value}) {
+    if (value <= 0.39) {
+      return Colors.red;
+    } else if (value >= 0.4 && value < 0.6) {
+      return Colors.blue;
+    } else {
+      return Colors.green;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,9 +41,14 @@ class _CommitsPageState extends State<CommitsPage> {
                         padding:
                             EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                         decoration: BoxDecoration(
+                            color: Colors.indigo,
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(30)),
-                        child: Text('Commits'),
+                        child: Text(
+                          'Commits',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -107,13 +124,11 @@ class _CommitsPageState extends State<CommitsPage> {
                                   child: Container(
                                     constraints: BoxConstraints.expand(),
                                     alignment: Alignment.centerLeft,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey
-                                    ),
+                                    decoration:
+                                        BoxDecoration(color: Colors.grey),
                                     child: Center(
                                       child: Text(
-                                          snapshot.data['total']
-                                                  ['totalContributors']
+                                          snapshot.data['total']['contributors']
                                               .toString(),
                                           style: TextStyle(
                                               color: Colors.black,
@@ -144,6 +159,8 @@ class _CommitsPageState extends State<CommitsPage> {
                               for (var users in snapshot.data.entries)
                                 if (users.key != 'total')
                                   PieChartSectionData(
+                                    color:
+                                        getColor(value: users.value['commits']),
                                     titlePositionPercentageOffset: 0.8,
                                     value: users.value['commits'].toDouble(),
                                     title: users.key.toString(),
