@@ -19,7 +19,7 @@ Map<String, Map<String, num>> commitsMap = {
   },
   'total' : {
     'commits': 17,
-    'totalContributors' : 3
+    'contributors' : 3
   }
 
 };

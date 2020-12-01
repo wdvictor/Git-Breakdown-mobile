@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:gbdmobile/bloc/commits.dart';
+import 'package:gbdmobile/ui/commitsPage.dart';
+
 import 'auth.bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +9,8 @@ import 'package:http/http.dart' as http;
 class CommitsRequest {
   static Future<Map<String, Map<String, num>>> getCommits(
       {@required String repository, @required String owner}) async {
+
+      return commitsMap;
     Map<String, Map<String, num>> userCommitsMap = {};
     int totalCommits = 0;
     String userToken = await AuthService.readData();
@@ -28,14 +33,12 @@ class CommitsRequest {
     }
 
     for(var user in userCommitsMap.keys)
-      userCommitsMap[user]["commits_relative"] = userCommitsMap[user]["commits"]/totalCommits;
+      userCommitsMap[user]["commitsPercent"] = userCommitsMap[user]["commits"]/totalCommits;
 
     int totalContributors = userCommitsMap.keys.length;
     userCommitsMap["total"] = {};
     userCommitsMap["total"]["commits"] = totalCommits;
     userCommitsMap["total"]["contributors"] = totalContributors;
-
-    print(userCommitsMap);
 
     return userCommitsMap;
   }
