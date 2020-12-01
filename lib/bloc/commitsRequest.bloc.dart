@@ -10,7 +10,6 @@ class CommitsRequest {
     int totalCommits = 0;
     String userToken = await AuthService.readData();
     userToken = userToken.replaceAll(RegExp('"'), '');
-
     final String githubApi =
         "https://git-breakdown-mobile.web.app/commits?owner=$owner&repository=$repository&token=$userToken";
 
@@ -21,6 +20,7 @@ class CommitsRequest {
       for(var user in parsed){
         if(user is List) break;
         totalCommits += user['commits'];
+        userCommitsMap[user['name']] = {};
         userCommitsMap[user['name']]["commits"] = user['commits'];
       }
     } catch (err) {
@@ -31,8 +31,11 @@ class CommitsRequest {
       userCommitsMap[user]["commits_relative"] = userCommitsMap[user]["commits"]/totalCommits;
 
     int totalContributors = userCommitsMap.keys.length;
+    userCommitsMap["total"] = {};
     userCommitsMap["total"]["commits"] = totalCommits;
     userCommitsMap["total"]["contributors"] = totalContributors;
+
+    print(userCommitsMap);
 
     return userCommitsMap;
   }
