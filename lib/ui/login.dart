@@ -25,7 +25,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     AuthService.readData().then(
       (fileString) {
+
         ///The [readData] function return null if no file exist.
+        ///
         if (fileString != null) {
           AuthService.createFirebaseUser(
             token: fileString.replaceAll(RegExp('"'), ''),
