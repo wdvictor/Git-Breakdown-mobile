@@ -4,34 +4,35 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CommitsRequest {
-  static Future<Map<String, double>> getCommits(
+  static Future<Map<String, Map<String, num>>> getCommits(
       {@required String repository, @required String owner}) async {
+    Map<String, Map<String, num>> userCommitsMap = {};
+    int totalCommits = 0;
     String userToken = await AuthService.readData();
     userToken = userToken.replaceAll(RegExp('"'), '');
 
-    ///This map return the github username as a Key and the total
-    ///of commits as value
-    Map<String, double> userCommitsMap = {};
     final String githubApi =
         "https://git-breakdown-mobile.web.app/commits?owner=$owner&repository=$repository&token=$userToken";
 
-    http.Client client = http.Client();
-    var response = await client.get(githubApi);
+    var response = await http.get(githubApi);
     final parsed = json.decode(response.body);
 
     try {
       for(var user in parsed){
         if(user is List) break;
-
-       
-          String username = user['name'];
-          int userCommits = user['commits'];
-          userCommitsMap[username] = userCommits.toDouble();
-       
+        totalCommits += user['commits'];
+        userCommitsMap[user['name']]["commits"] = user['commits'];
       }
     } catch (err) {
       return null;
     }
+
+    for(var user in userCommitsMap.keys)
+      userCommitsMap[user]["commits_relative"] = userCommitsMap[user]["commits"]/totalCommits;
+
+    int totalContributors = userCommitsMap.keys.length;
+    userCommitsMap["total"]["commits"] = totalCommits;
+    userCommitsMap["total"]["contributors"] = totalContributors;
 
     return userCommitsMap;
   }

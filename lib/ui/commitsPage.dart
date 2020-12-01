@@ -15,7 +15,7 @@ class _CommitsPageState extends State<CommitsPage> {
         body: FutureBuilder(
             future: CommitsRequest.getCommits(
                 repository: '2019.2-Git-Breakdown', owner: 'fga-eps-mds'),
-            builder: (context, AsyncSnapshot<Map<String, double>> snapshot) {
+            builder: (context, AsyncSnapshot<Map<String, Map<String, num>>> snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
               print(snapshot.data.keys);
 
@@ -82,7 +82,7 @@ class _CommitsPageState extends State<CommitsPage> {
                                 for (var users in snapshot.data.entries)
                                   PieChartSectionData(
                                       titlePositionPercentageOffset: 0.8,
-                                      value: users.value.toDouble(),
+                                      value: 0,
                                       title: users.key.toString(),
                                       radius:
                                           MediaQuery.of(context).size.width *
