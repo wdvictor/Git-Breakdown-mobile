@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
 import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
+import 'package:gbdmobile/ui/commitsPage.dart';
 import 'package:gbdmobile/ui/reposList.dart';
 
 
@@ -33,9 +34,7 @@ class _LoginPageState extends State<LoginPage> {
             (repos) => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ReposList(
-                  reposList: repos,
-                ),
+                builder: (context) => CommitsPage()
               ),
             ),
           );
