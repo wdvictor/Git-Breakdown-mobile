@@ -15,7 +15,8 @@ class _CommitsPageState extends State<CommitsPage> {
         body: FutureBuilder(
             future: CommitsRequest.getCommits(
                 repository: '2019.2-Git-Breakdown', owner: 'fga-eps-mds'),
-            builder: (context, AsyncSnapshot<Map<String, Map<String, num>>> snapshot) {
+            builder: (context,
+                AsyncSnapshot<Map<String, Map<String, num>>> snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
               print(snapshot.data.keys);
 
@@ -56,7 +57,9 @@ class _CommitsPageState extends State<CommitsPage> {
                             child: Column(
                               children: [
                                 Expanded(
-                                  child: Container(child: Text(''),),
+                                  child: Container(
+                                    child: Text(''),
+                                  ),
                                 ),
                                 Expanded(
                                   child: Container(),
@@ -80,16 +83,17 @@ class _CommitsPageState extends State<CommitsPage> {
                               ),
                               sections: [
                                 for (var users in snapshot.data.entries)
-                                  PieChartSectionData(
-                                      titlePositionPercentageOffset: 0.8,
-                                      value: 0,
-                                      title: users.key.toString(),
-                                      radius:
-                                          MediaQuery.of(context).size.width *
-                                              0.45,
-                                      titleStyle: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                      ))
+                                  if (users.key != 'total')
+                                    PieChartSectionData(
+                                        titlePositionPercentageOffset: 0.8,
+                                        value: users.value['commits'].toDouble(),
+                                        title: users.key.toString(),
+                                        radius:
+                                            MediaQuery.of(context).size.width *
+                                                0.45,
+                                        titleStyle: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                        ))
                               ])),
                         ),
                       ),
