@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'auth.bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:http/http.dart' as http;
 
 class CommitsRequest {
@@ -21,12 +20,12 @@ class CommitsRequest {
     final parsed = json.decode(response.body);
 
     try {
-      for(var x in parsed){
-        if(x is List) break;
+      for(var user in parsed){
+        if(user is List) break;
 
        
-          String username = x['name'];
-          int userCommits = x['commits'];
+          String username = user['name'];
+          int userCommits = user['commits'];
           userCommitsMap[username] = userCommits;
        
       }
