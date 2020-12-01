@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CommitsRequest {
-  static Future<Map<String, int>> getCommits(
+  static Future<Map<String, double>> getCommits(
       {@required String repository, @required String owner}) async {
     String userToken = await AuthService.readData();
     userToken = userToken.replaceAll(RegExp('"'), '');
 
     ///This map return the github username as a Key and the total
     ///of commits as value
-    Map<String, int> userCommitsMap = {};
+    Map<String, double> userCommitsMap = {};
     final String githubApi =
         "https://git-breakdown-mobile.web.app/commits?owner=$owner&repository=$repository&token=$userToken";
 
@@ -26,7 +26,7 @@ class CommitsRequest {
        
           String username = user['name'];
           int userCommits = user['commits'];
-          userCommitsMap[username] = userCommits;
+          userCommitsMap[username] = userCommits.toDouble();
        
       }
     } catch (err) {

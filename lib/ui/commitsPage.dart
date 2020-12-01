@@ -8,11 +8,6 @@ class CommitsPage extends StatefulWidget {
 }
 
 class _CommitsPageState extends State<CommitsPage> {
-
-
-
-  
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -20,7 +15,7 @@ class _CommitsPageState extends State<CommitsPage> {
         body: FutureBuilder(
             future: CommitsRequest.getCommits(
                 repository: '2019.2-Git-Breakdown', owner: 'fga-eps-mds'),
-            builder: (context, AsyncSnapshot<Map<String, int>> snapshot) {
+            builder: (context, AsyncSnapshot<Map<String, double>> snapshot) {
               if (!snapshot.hasData) return CircularProgressIndicator();
               print(snapshot.data.keys);
 
@@ -30,17 +25,54 @@ class _CommitsPageState extends State<CommitsPage> {
                     Expanded(
                       child: Center(
                         child: Container(
-                          child: Text('Métricas de commits'),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Text('Commits'),
                         ),
                       ),
                     ),
                     Expanded(
-                      flex: 5,
+                      flex: 2,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    child: Text('Total de commits:'),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                )
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Container(child: Text(''),),
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 7,
                       child: Center(
                         child: Container(
                           constraints: BoxConstraints.expand(),
-                          child: PieChart(
-                            PieChartData(
+                          child: PieChart(PieChartData(
                               sectionsSpace: 0,
                               centerSpaceRadius: 0,
                               borderData: FlBorderData(
@@ -49,16 +81,15 @@ class _CommitsPageState extends State<CommitsPage> {
                               sections: [
                                 for (var users in snapshot.data.entries)
                                   PieChartSectionData(
-                                   titlePositionPercentageOffset: 0.8,
-                                    value: users.value.toDouble(),
-                                    title: users.key.toString(),
-                                    radius: MediaQuery.of(context).size.width * 0.45,
-                                    titleStyle: TextStyle(
-                                      fontWeight: FontWeight.normal,
-
-                                    )
-                                    
-                                  )
+                                      titlePositionPercentageOffset: 0.8,
+                                      value: users.value.toDouble(),
+                                      title: users.key.toString(),
+                                      radius:
+                                          MediaQuery.of(context).size.width *
+                                              0.45,
+                                      titleStyle: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                      ))
                               ])),
                         ),
                       ),
