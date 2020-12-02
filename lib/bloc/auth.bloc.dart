@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gbdmobile/Models/user.dart';
 import 'package:gbdmobile/bloc/LoggedUser.dart';
+import 'package:gbdmobile/routeGenerator.dart';
 import 'package:gbdmobile/secret_keys.dart' as SecretKey;
 import 'package:github_auth/github_auth.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,8 +28,8 @@ class AuthService {
       );
 
       githubAuth.login(context).then((value) {
-        saveData(token: value.token);
         createFirebaseUser(token: value.token);
+        Navigator.pushReplacementNamed(context, RouteGenerator.HOME_ROUTE);
       });
       return true;
     } catch (error) {
@@ -52,6 +53,7 @@ class AuthService {
           photoUrl: userCredential.user.photoURL,
           email: userCredential.user.email,
           displayName: userCredential.user.displayName);
+      await saveData(user: LoggedUser.user);
 
       return true;
     } catch (error) {
@@ -61,7 +63,6 @@ class AuthService {
       return false;
     }
   }
-
 
   static Future<File> _getFile() async {
     try {
@@ -77,8 +78,8 @@ class AuthService {
 
 
   ///This function take the token and save into a file to use later.
-  static Future<File> saveData({@required token}) async {
-    String data = json.encode(token);
+  static Future<File> saveData({@required user}) async {
+    String data = json.encode(LoggedUser.user.toJson());
 
     final file = await _getFile();
     return file.writeAsString(data);

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
 import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
-import 'package:gbdmobile/ui/commitsPage.dart';
-import 'package:gbdmobile/ui/reposList.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gbdmobile/routeGenerator.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,9 +11,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  Future _verifyUserLogged() {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User user = auth.currentUser;
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, RouteGenerator.HOME_ROUTE);
+      }
+    });
+
+  }
+
   @override
   void initState() {
     super.initState();
+    _verifyUserLogged();
   }
 
   @override
@@ -22,19 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    
-    AuthService.readData().then(
-      (fileString) {
-        ///The [readData] function return null if no file exist.
-        ///
-        if (fileString != null) {
-          AuthService.createFirebaseUser(
-            token: fileString.replaceAll(RegExp('"'), ''),
-          );
-        }
-        
-      },
-    );
+
 
     return Scaffold(
       backgroundColor: Colors.black,
