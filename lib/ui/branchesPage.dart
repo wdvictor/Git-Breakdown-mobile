@@ -279,6 +279,7 @@ class ContentTable extends StatelessWidget {
   }
 }
 
+
 class PageTitle extends StatelessWidget {
   const PageTitle({
     Key key,

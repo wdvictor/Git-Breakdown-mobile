@@ -22,9 +22,17 @@ class PRRequest {
       pullRequestMap["closed"] = parsed["closed"];
       pullRequestMap["refused"] = parsed["refused"];
       pullRequestMap["merged"] = parsed["merged"];
-      pullRequestMap["refusedPercent"] = parsed["refused_percent"];
-      pullRequestMap["mergedPercent"] = parsed["merged"]/pullRequestMap["total"];
+      pullRequestMap["refusedPercent"] = double.parse(
+        parsed["refused_percent"].toString().substring(0, 4),
+      );
+
+      pullRequestMap["mergedPercent"] =
+      double.parse(((parsed["merged"] / pullRequestMap["total"]) * 100).toString().substring(0, 5));
+          
     } catch (err) {
+      print(
+        '(SYS) error:' + err.toString(),
+      );
       return null;
     }
 
