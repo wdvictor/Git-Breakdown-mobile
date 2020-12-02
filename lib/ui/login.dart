@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
 import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
+import 'package:gbdmobile/ui/commitsPage.dart';
 import 'package:gbdmobile/ui/reposList.dart';
-
 
 class LoginPage extends StatefulWidget {
   @override
@@ -22,24 +22,17 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    
     AuthService.readData().then(
       (fileString) {
         ///The [readData] function return null if no file exist.
+        ///
         if (fileString != null) {
           AuthService.createFirebaseUser(
             token: fileString.replaceAll(RegExp('"'), ''),
           );
-          ReposRequest.getUserRepos().then(
-            (repos) => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ReposList(
-                  reposList: repos,
-                ),
-              ),
-            ),
-          );
         }
+        
       },
     );
 

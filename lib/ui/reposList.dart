@@ -17,7 +17,6 @@ class _ReposList extends State<ReposList> {
  
   @override
   Widget build(BuildContext context) {
-    CommitsRequest.getCommits(repository: 'flutter', owner: 'flutter');
     return Scaffold(
       appBar: AppBar(
         leading: Container(
