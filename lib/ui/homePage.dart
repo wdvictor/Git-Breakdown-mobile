@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/Models/user.dart';
 import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
 import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
+import 'package:gbdmobile/routeGenerator.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -41,6 +43,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  _signOut() async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.signOut();
+
+    Navigator.pushReplacementNamed(context, RouteGenerator.LOGIN_ROUTE);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,50 +62,74 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Git BreakDown"),
+        title: _selectedRepository == null?
+          Text("Git BreakDown") : Text(_selectedRepository),
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
-            UserAccountsDrawerHeader(
-                accountName: Text(_user.displayName),
-                accountEmail: Text(_user.email),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(_user.photoUrl),
+            Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    UserAccountsDrawerHeader(
+                      accountName: Text(_user.displayName),
+                      accountEmail: Text(_user.email),
+                      currentAccountPicture: CircleAvatar(
+                        backgroundImage: NetworkImage(_user.photoUrl),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropdownButton<String>(
+                        value: _selectedRepository,
+                        hint: Text("Selecione um repositório"),
+                        icon: Align(
+                            alignment: Alignment.centerRight,
+                            child: Icon(Icons.arrow_drop_down)
+                        ),
+                        iconSize: 24,
+                        isExpanded: true,
+                        isDense: true,
+                        //elevation: 16,
+                        style: TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 1,
+                          color: Colors.deepPurpleAccent,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            _selectedRepository = newValue;
+                          });
+                        },
+                        items: _userRepos
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: DropdownButton<String>(
-                value: _selectedRepository,
-                hint: Text("Selecione um repositório"),
-                icon: Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.arrow_drop_down)
-                ),
-                iconSize: 24,
-                isExpanded: true,
-                isDense: true,
-                //elevation: 16,
-                style: TextStyle(color: Colors.deepPurple),
-                underline: Container(
-                  height: 1,
-                  color: Colors.deepPurpleAccent,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    _selectedRepository = newValue;
-                  });
-                },
-                items: _userRepos
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
+            Container(
+              child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Divider(),
+                      ListTile(
+                        leading: Icon(Icons.logout),
+                        title: Text('Sair'),
+                        onTap: _signOut,
+                      ),
+                    ],
+                  )
+                )
+              )
             )
           ],
         ),
