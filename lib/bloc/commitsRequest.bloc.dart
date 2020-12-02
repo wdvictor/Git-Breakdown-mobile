@@ -10,7 +10,7 @@ class CommitsRequest {
   static Future<Map<String, Map<String, num>>> getCommits(
       {@required String repository, @required String owner}) async {
 
-      //return commitsMap;
+      return commitsMap;
     Map<String, Map<String, num>> userCommitsMap = {};
     int totalCommits = 0;
     String userToken = await AuthService.readData();
