@@ -183,7 +183,7 @@ class Chart extends StatelessWidget {
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
                 value: prData['refusedPercent'],
-                title: 'Refuded' + ' ${prData['refusedPercent']}%',
+                title: 'Refused' + ' ${prData['refusedPercent']}%',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
