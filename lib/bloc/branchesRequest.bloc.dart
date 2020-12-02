@@ -7,11 +7,6 @@ class BranchesRequest {
   static Future<Map<String, num>> getBranches(
       {@required String repository, @required String owner}) async {
 
-
-          return {'active_branches': 10, 'percentage_merged': 88.76};
-
-
-
     Map<String, num> branchesMap = {};
     String userToken = await AuthService.readData();
 
