@@ -14,7 +14,7 @@ Link para API: https://git-breakdown-mobile.web.app
  6. /profile
 
  - E contém 3 parâmetros:
-	
+
 
  1. ?owner= <Usuário do Github dono do projeto>
  2. ?repository=<repositório>
@@ -23,5 +23,3 @@ Link para API: https://git-breakdown-mobile.web.app
  - Não se esqueça de que que parâmetros precisam de um **&** entre eles. Segue um exemplo de requisição:
 
 			https://git-breakdown-mobile.web.app/commits?owner=fga-eps-mds&repository=2019.2-Git-Breakdown&token=<token>
-
-
