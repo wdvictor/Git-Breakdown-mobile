@@ -134,6 +134,7 @@ class ChartSubtitleWidget extends StatelessWidget {
   }
 }
 
+
 class Chart extends StatelessWidget {
   final Map<String, num> branchesData;
   const Chart({@required this.branchesData});
@@ -278,6 +279,7 @@ class ContentTable extends StatelessWidget {
     );
   }
 }
+
 
 class PageTitle extends StatelessWidget {
   const PageTitle({
