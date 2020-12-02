@@ -12,6 +12,7 @@ class _PrPageState extends State<PrPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.grey[300],
         body: FutureBuilder(
           future: PRRequest.getPRs(
               repository: '2019.2-Git-Breakdown', owner: 'fga-eps-mds'),
@@ -39,8 +40,8 @@ class _PrPageState extends State<PrPage> {
                       ),
                     ),
                     Expanded(
-                      flex: 3,
-                      child: Container(),
+                      flex: 4,
+                      child: ChartSubtitleWidget(),
                     ),
                   ],
                 ),
@@ -205,3 +206,85 @@ class Chart extends StatelessWidget {
     );
   }
 }
+
+
+class ChartSubtitleWidget extends StatelessWidget {
+  const ChartSubtitleWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.red,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Below 40% of merged Pull Requests'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Between 40% and 60% of merged Pull Requests'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.green,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Above 60% of merged Pull Requests'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
