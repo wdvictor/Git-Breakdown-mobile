@@ -39,6 +39,7 @@ class CommitsRequest {
     userCommitsMap["total"] = {};
     userCommitsMap["total"]["commits"] = totalCommits;
     userCommitsMap["total"]["contributors"] = totalContributors;
+    userCommitsMap["total"]['avarageCommits'] = totalCommits / totalContributors;
 
     return userCommitsMap;
   }

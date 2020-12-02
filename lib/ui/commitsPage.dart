@@ -11,10 +11,10 @@ class CommitsPage extends StatefulWidget {
 class _CommitsPageState extends State<CommitsPage> {
   ///Return Red to bad status, blue to medium status, and green to
   ///good status based on user percent
-  MaterialColor getColor({@required num value}) {
-    if (value <= 0.39) {
+  MaterialColor getColor({@required num avarage, @required num value}) {
+    if (value <= avarage) {
       return Colors.red;
-    } else if (value >= 0.4 && value < 0.6) {
+    } else if (value >= (avarage-avarage*0.4) && value < avarage+avarage*0.6) {
       return Colors.blue;
     } else {
       return Colors.green;
@@ -160,7 +160,7 @@ class _CommitsPageState extends State<CommitsPage> {
                                 if (users.key != 'total')
                                   PieChartSectionData(
                                     color:
-                                        getColor(value: users.value['commits']),
+                                        getColor(value: users.value['commits'], avarage: snapshot.data['total']['avarageCommits'].toDouble()),
                                     titlePositionPercentageOffset: 0.8,
                                     value: users.value['commits'].toDouble(),
                                     title: users.key.toString(),
