@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'user.g.dart';
+
+@JsonSerializable(nullable: false)
 class GbdUser {
   final String userName;
   final String clientToken;
@@ -14,5 +18,7 @@ class GbdUser {
       @required this.email,
       @required this.photoUrl});
 
+  factory GbdUser.fromJson(Map<String, dynamic> json) => _$GbdUserFromJson(json);
+  Map<String, dynamic> toJson() => _$GbdUserToJson(this);
  
 }
