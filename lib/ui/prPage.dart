@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/prRequest.bloc.dart';
 
@@ -31,7 +32,12 @@ class _PrPageState extends State<PrPage> {
                         prData: snapshot.data,
                       ),
                     ),
-                    Expanded(flex: 10, child: Container()),
+                    Expanded(
+                      flex: 10,
+                      child: Chart(
+                        prData: snapshot.data,
+                      ),
+                    ),
                     Expanded(
                       flex: 3,
                       child: Container(),
@@ -128,9 +134,9 @@ class ContentTable extends StatelessWidget {
                       decoration: BoxDecoration(color: Colors.grey),
                       child: Center(
                         child: Text(
-                          data.value.runtimeType == double 
-                          ? data.value.toString() + ' %'
-                          : data.value.toString(),
+                          data.value.runtimeType == double
+                              ? data.value.toString() + ' %'
+                              : data.value.toString(),
                           style: TextStyle(
                               color: Colors.black, fontWeight: FontWeight.bold),
                         ),
@@ -141,6 +147,60 @@ class ContentTable extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class Chart extends StatelessWidget {
+  final Map<String, num> prData;
+  const Chart({@required this.prData});
+
+  MaterialColor getColor({@required num value}) {
+    if (value <= 39)
+      return Colors.red;
+    else if (value > 39 && value <= 60)
+      return Colors.blue;
+    else
+      return Colors.green;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        constraints: BoxConstraints.expand(),
+        child: PieChart(
+          PieChartData(
+            sectionsSpace: 1,
+            centerSpaceRadius: 0,
+            borderData: FlBorderData(
+              show: false,
+            ),
+            sections: [
+              PieChartSectionData(
+                color: Colors.indigo,
+                titlePositionPercentageOffset: 0.5,
+                value: prData['refusedPercent'],
+                title: 'Refuded' + ' ${prData['refusedPercent']}%',
+                radius: MediaQuery.of(context).size.width * 0.45,
+                titleStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              PieChartSectionData(
+                color: getColor(value: prData['mergedPercent'],),
+                titlePositionPercentageOffset: 0.5,
+                value: prData['mergedPercent'],
+                title: 'Merged' +  " ${prData['mergedPercent']}%",
+                radius: MediaQuery.of(context).size.width * 0.45,
+                titleStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
