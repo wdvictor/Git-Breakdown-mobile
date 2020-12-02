@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gbdmobile/ui/branchesPage.dart';
 import 'package:gbdmobile/ui/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
           child: FutureBuilder(
               future: Firebase.initializeApp(),
               builder: (context, snapshot) {
-                return LoginPage();
+                return BranchesPage();
               }),
         ),
       ),
