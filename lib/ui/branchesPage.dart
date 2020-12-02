@@ -40,7 +40,7 @@ class _BranchesPageState extends State<BranchesPage> {
                       ),
                     ),
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: ChartSubtitleWidget(),
                     ),
                   ],
@@ -61,72 +61,75 @@ class ChartSubtitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.red,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.red,
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Below 40% of merged branches'),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Below 40% of merged branches'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.blue,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.blue,
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Between 40% and 60% if merged branches'),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Between 40% and 60% of merged branches'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.green,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.green,
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Above 60% of merged branches'),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Above 60% of merged branches'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
