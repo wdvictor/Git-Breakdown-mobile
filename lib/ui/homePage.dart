@@ -19,9 +19,31 @@ class _HomePageState extends State<HomePage> {
       displayName: "Nome do Usuário");
   List<String> _userRepos = [];
 
+  void getInitialData() async{
+    if(LoggedUser.user == null){
+      await AuthService.readData().then(
+              (value){
+            var data = json.decode(value);
+            LoggedUser.user = GbdUser.fromJson(data);
+            setState(() {
+              _user = LoggedUser.user;
+            });
+          }
+      );
+    }
+
+    await ReposRequest.getUserRepos()
+        .then((repos){
+         setState(() {
+           _userRepos = repos;
+         });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getInitialData();
   }
 
   @override
