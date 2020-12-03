@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/Models/user.dart';
@@ -6,13 +7,19 @@ import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
 import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
 import 'package:gbdmobile/routeGenerator.dart';
+import 'package:gbdmobile/ui/branchesPage.dart';
+import 'package:gbdmobile/ui/commitsPage.dart';
+import 'package:gbdmobile/ui/prPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
+  final _metrics = [
+    "Commits", "Issues", "Branches", "Pull Requests"
+  ];
   GbdUser _user = GbdUser(
       userName: "username",
       clientToken: "token",
@@ -21,6 +28,7 @@ class _HomePageState extends State<HomePage> {
       displayName: "Nome do Usuário");
   List<String> _userRepos = [];
   String _selectedRepository;
+  TabController _tabController;
 
   void getInitialData() async{
     if(LoggedUser.user == null){
@@ -46,7 +54,6 @@ class _HomePageState extends State<HomePage> {
   _signOut() async{
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.signOut();
-
     Navigator.pushReplacementNamed(context, RouteGenerator.LOGIN_ROUTE);
   }
 
@@ -54,6 +61,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getInitialData();
+    _tabController = TabController(
+        length: 4,
+        vsync: this
+    );
   }
 
   @override
@@ -64,6 +75,19 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: _selectedRepository == null?
           Text("Git BreakDown") : Text(_selectedRepository),
+        bottom: TabBar(
+          isScrollable: true,
+          indicatorWeight: 4,
+          labelStyle: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+          ),
+          controller: _tabController,
+          indicatorColor: Platform.isIOS ? Colors.grey[400] : Colors.white,
+          tabs: [
+            for(final metric in _metrics) Tab(text: metric,)
+          ],
+        ),
       ),
       drawer: Drawer(
         child: Column(
@@ -91,7 +115,6 @@ class _HomePageState extends State<HomePage> {
                         iconSize: 24,
                         isExpanded: true,
                         isDense: true,
-                        //elevation: 16,
                         style: TextStyle(color: Colors.deepPurple),
                         underline: Container(
                           height: 1,
@@ -120,7 +143,10 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   child: Column(
                     children: <Widget>[
-                      Divider(),
+                      Divider(
+                        height: 1,
+                        thickness: 1,
+                      ),
                       ListTile(
                         leading: Icon(Icons.logout),
                         title: Text('Sair'),
@@ -134,7 +160,15 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Container(),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          CommitsPage(),
+          Container(),
+          BranchesPage(),
+          PrPage()
+        ],
+      ),
     );
   }
 

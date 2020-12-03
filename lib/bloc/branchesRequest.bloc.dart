@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'auth.bloc.dart';
+import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,11 +8,9 @@ class BranchesRequest {
       {@required String repository, @required String owner}) async {
 
     Map<String, num> branchesMap = {};
-    String userToken = await AuthService.readData();
-
-    userToken = userToken.replaceAll(RegExp('"'), '');
+    String token = LoggedUser.user.clientToken;
     final String githubApi =
-        "https://git-breakdown-mobile.web.app/branches?owner=$owner&repository=$repository&token=$userToken";
+        "https://git-breakdown-mobile.web.app/branches?owner=$owner&repository=$repository&token=$token";
     var response = await http.get(githubApi);
     final parsed = json.decode(response.body);
 
