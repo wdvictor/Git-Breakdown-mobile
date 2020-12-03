@@ -12,6 +12,8 @@ import 'package:gbdmobile/ui/commitsPage.dart';
 import 'package:gbdmobile/ui/issuesPage.dart';
 import 'package:gbdmobile/ui/prPage.dart';
 
+import 'InitialPage.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -19,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  final _metrics = ["Commits", "Issues", "Branches", "Pull Requests"];
+  final _metrics = ["home","Commits", "Issues", "Branches", "Pull Requests"];
   GbdUser _user = GbdUser(
       userName: "username",
       clientToken: "token",
@@ -51,6 +53,8 @@ class _HomePageState extends State<HomePage>
         setState(
           () {
             _userRepos = repos;
+            selectedRepository.value = repos.first;
+            _selectedRepository = repos.first;
           },
         );
       },
@@ -67,7 +71,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     getInitialData();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -171,6 +175,7 @@ class _HomePageState extends State<HomePage>
           return TabBarView(
             controller: _tabController,
             children: [
+              InitPage(),
               CommitsPage(repo),
               IssuesPage(repo),
               BranchesPage(repo),
