@@ -235,13 +235,11 @@ class ContentTable extends StatelessWidget {
                     decoration: BoxDecoration(color: Colors.black),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Center(
                         child: Text(
                           'Closed issues',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                      ),
                     ),
                   ),
                 )
