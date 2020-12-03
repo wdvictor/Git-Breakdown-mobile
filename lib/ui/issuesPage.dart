@@ -174,7 +174,7 @@ class Chart extends StatelessWidget {
                 titlePositionPercentageOffset: 0.5,
                 value: issuesData['closedPercent'],
                 title: 'Closed Issues' +
-                    ' ${issuesData['closedPercent']}% ',
+                    '${issuesData['closedPercent']}% ',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -183,8 +183,9 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
-                value: issuesData['openPercent'],
-                title: 'Open issues' + '${issuesData['openPercent']}%',
+                value: 100 - issuesData['closedPercent'],
+                title: 'Open Issues' +
+                    '${issuesData['openPercent']}%',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
