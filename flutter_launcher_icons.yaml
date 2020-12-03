@@ -1,0 +1,4 @@
+flutter_icons:
+  image_path: "assets/logo_fundo_br.png"
+  android: true
+  ios: true
