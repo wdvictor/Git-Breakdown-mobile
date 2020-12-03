@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
                                 child: Text(
-                                  'Login with Github',
+                                  'Login',
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
