@@ -173,11 +173,10 @@ class Chart extends StatelessWidget {
       return Colors.green;
   }
 
-  
   @override
   Widget build(BuildContext context) {
-     print(prData.toString());
-    
+    print(prData.toString());
+
     return Center(
       child: Container(
         constraints: BoxConstraints.expand(),
@@ -192,18 +191,18 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
-                value: prData['refusedPercent'],
-                title: 'Refused' + ' ${prData['refusedPercent']}%',
+                value: prData['mergedPercent'],
+                title: 'Pull requests merged ${prData['mergedPercent']}%',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               PieChartSectionData(
-                color: getColor(value: prData['mergedPercent'],),
+                color: Colors.red,
                 titlePositionPercentageOffset: 0.5,
-                value: prData['mergedPercent'],
-                title: 'Merged' +  " ${prData['mergedPercent']}%",
+                value: 100 - prData['mergedPercent'],
+                title: ' ',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -212,11 +211,42 @@ class Chart extends StatelessWidget {
             ],
           ),
         ),
+
+        // child: PieChart(
+        //   PieChartData(
+        //     sectionsSpace: 1,
+        //     centerSpaceRadius: 0,
+        //     borderData: FlBorderData(
+        //       show: false,
+        //     ),
+        //     sections: [
+        //       PieChartSectionData(
+        //         color: Colors.indigo,
+        //         titlePositionPercentageOffset: 0.5,
+        //         value: prData['refusedPercent'],
+        //         title: 'Refused' + ' ${prData['refusedPercent']}%',
+        //         radius: MediaQuery.of(context).size.width * 0.45,
+        //         titleStyle: TextStyle(
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //       PieChartSectionData(
+        //         color: getColor(value: prData['mergedPercent'],),
+        //         titlePositionPercentageOffset: 0.5,
+        //         value: prData['mergedPercent'],
+        //         title: 'Merged' +  " ${prData['mergedPercent']}%",
+        //         radius: MediaQuery.of(context).size.width * 0.45,
+        //         titleStyle: TextStyle(
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
 }
-
 
 class ChartSubtitleWidget extends StatelessWidget {
   const ChartSubtitleWidget({
@@ -264,7 +294,8 @@ class ChartSubtitleWidget extends StatelessWidget {
                     flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Between 40% and 60% of merged Pull Requests'),
+                      child:
+                          Text('Between 40% and 60% of merged Pull Requests'),
                     ),
                   ),
                 ],
@@ -297,4 +328,3 @@ class ChartSubtitleWidget extends StatelessWidget {
     );
   }
 }
-
