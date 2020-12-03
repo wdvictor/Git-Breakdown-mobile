@@ -183,8 +183,8 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
-                value: 100 - issuesData['closedPercent'],
-                title: 'Open percent ${issuesData['closedPercent']}%',
+                value: issuesData['openPercent'],
+                title: 'Open issues' + '${issuesData['openPercent']}%',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -220,7 +220,7 @@ class ContentTable extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Active branches',
+                        'Open issues',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
@@ -236,7 +236,7 @@ class ContentTable extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                         child: Text(
-                          'Percentage of closed issues',
+                          'Closed issues',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
@@ -258,7 +258,7 @@ class ContentTable extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(color: Colors.grey),
                     child: Center(
-                      child: Text(issuesData['openPercent'].toString() + '%',
+                      child: Text(issuesData['open'].toString(),
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
@@ -272,7 +272,7 @@ class ContentTable extends StatelessWidget {
                     decoration: BoxDecoration(color: Colors.grey),
                     child: Center(
                       child: Text(
-                          issuesData['closedPercent'].toString() + '%',
+                          issuesData['closed'].toString(),
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
