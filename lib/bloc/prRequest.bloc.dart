@@ -13,19 +13,23 @@ class PRRequest {
 
     var response = await http.get(githubApi);
     final parsed = json.decode(response.body);
-
+    print(parsed);
     try {
       pullRequestMap["total"] = parsed["open"] + parsed["closed"];
       pullRequestMap["open"] = parsed["open"];
       pullRequestMap["closed"] = parsed["closed"];
       pullRequestMap["refused"] = parsed["refused"];
       pullRequestMap["merged"] = parsed["merged"];
-      pullRequestMap["refusedPercent"] = double.parse(
-        parsed["refused_percent"].toString().substring(0, 4),
-      );
-
-      pullRequestMap["mergedPercent"] =
-      double.parse(((parsed["merged"] / pullRequestMap["total"]) * 100).toString().substring(0, 5));
+      if(parsed["refused_percent"] == null) {
+        pullRequestMap["refusedPercent"] = 0;
+      }else {
+        pullRequestMap["refusedPercent"] = double.tryParse(
+          parsed["refused_percent"].toString().substring(0, 4),
+        );
+      }
+      double mergedPercent = (pullRequestMap["merged"] / pullRequestMap["total"]) * 100;
+      pullRequestMap["mergedPercent"] = mergedPercent;
+      //double.tryParse(((parsed["merged"] / pullRequestMap["total"]) * 100).toString().substring(0, 5));
           
     } catch (err) {
       print(
@@ -33,7 +37,7 @@ class PRRequest {
       );
       return null;
     }
-
+    print(pullRequestMap);
     return pullRequestMap;
   }
 }

@@ -1,13 +1,20 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/prRequest.bloc.dart';
 
 class PrPage extends StatefulWidget {
+  String _repository;
+  PrPage(this._repository);
+
   @override
-  _PrPageState createState() => _PrPageState();
+  _PrPageState createState() => _PrPageState(this._repository);
 }
 
 class _PrPageState extends State<PrPage> {
+  String _repository;
+  _PrPageState(this._repository);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -15,7 +22,7 @@ class _PrPageState extends State<PrPage> {
         backgroundColor: Colors.grey[300],
         body: FutureBuilder(
           future: PRRequest.getPRs(
-              repository: '2019.2-Git-Breakdown', owner: 'fga-eps-mds'),
+              repository: _repository, owner: LoggedUser.user.userName),
           builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
             if (!snapshot.hasData) return CircularProgressIndicator();
             print(snapshot.data);

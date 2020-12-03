@@ -163,10 +163,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body: TabBarView(
         controller: _tabController,
         children: [
-          CommitsPage(),
+          CommitsPage(_selectedRepository),
           Container(),
-          BranchesPage(),
-          PrPage()
+          BranchesPage(_selectedRepository),
+          PrPage(_selectedRepository)
         ],
       ),
     );

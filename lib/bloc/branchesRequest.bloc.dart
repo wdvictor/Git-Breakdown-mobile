@@ -21,7 +21,6 @@ class BranchesRequest {
       print('(SYS) error:' + err.toString());
       return null;
     }
-    print(branchesMap);
     return branchesMap;
   }
 }
