@@ -4,7 +4,7 @@ import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/branchesRequest.bloc.dart';
 
 class BranchesPage extends StatefulWidget {
-  String _repository;
+  final String _repository;
   BranchesPage(this._repository);
 
   @override

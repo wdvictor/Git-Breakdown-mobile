@@ -4,7 +4,7 @@ import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/prRequest.bloc.dart';
 
 class PrPage extends StatefulWidget {
-  String _repository;
+  final String _repository;
   PrPage(this._repository);
 
   @override
@@ -173,8 +173,10 @@ class Chart extends StatelessWidget {
       return Colors.green;
   }
 
+  
   @override
   Widget build(BuildContext context) {
+     print(prData.toString());
     return Center(
       child: Container(
         constraints: BoxConstraints.expand(),
@@ -189,7 +191,7 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
-                value: prData['refusedPercent'],
+                value: prData['refusedPercent'].toDouble(),
                 title: 'Refused' + ' ${prData['refusedPercent']}%',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(

@@ -4,7 +4,7 @@ import 'package:gbdmobile/bloc/commitsRequest.bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class CommitsPage extends StatefulWidget {
-  String _repository;
+  final String _repository;
   CommitsPage(this._repository);
 
   @override

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'auth.bloc.dart';
 import 'LoggedUser.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
