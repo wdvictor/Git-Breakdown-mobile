@@ -72,6 +72,10 @@ class _HomePageState extends State<HomePage>
     super.initState();
     getInitialData();
     _tabController = TabController(length: 5, vsync: this);
+
+    selectedRepository.addListener(() {
+      _tabController.animateTo(0);
+    });
   }
 
   @override
