@@ -33,7 +33,6 @@ class AuthService {
       });
       return true;
     } catch (error) {
-      print('(SYS) error' + error.toString());
       return false;
     }
   }
@@ -57,9 +56,6 @@ class AuthService {
 
       return true;
     } catch (error) {
-      print(
-        '(SYS) error : ' + error.toString(),
-      );
       return false;
     }
   }
@@ -69,9 +65,6 @@ class AuthService {
       final directory = await getApplicationDocumentsDirectory();
       return File("${directory.path}/data.json");
     } catch (err) {
-      print(
-        '(SYS) error: ' + err.toString(),
-      );
       return null;
     }
   }

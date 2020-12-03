@@ -4,57 +4,60 @@ import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/prRequest.bloc.dart';
 
 class PrPage extends StatefulWidget {
-  String _repository;
-  PrPage(this._repository);
+  final ValueNotifier<String> selectedRepository;
+  PrPage(this.selectedRepository);
 
   @override
-  _PrPageState createState() => _PrPageState(this._repository);
+  _PrPageState createState() => _PrPageState();
 }
 
 class _PrPageState extends State<PrPage> {
-  String _repository;
-  _PrPageState(this._repository);
+
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[300],
-        body: FutureBuilder(
-          future: PRRequest.getPRs(
-              repository: _repository, owner: LoggedUser.user.userName),
-          builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
-            if (!snapshot.hasData) return CircularProgressIndicator();
-            print(snapshot.data);
-            return SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 1.3,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: PageTitle(),
+        body: ValueListenableBuilder<String>(
+         valueListenable: widget.selectedRepository,
+          builder: (context, repo, _) {
+            return FutureBuilder(
+              future: PRRequest.getPRs(
+                  repository: repo, owner: LoggedUser.user.userName),
+              builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
+                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+                return SingleChildScrollView(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 1.3,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: PageTitle(),
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: ContentTable(
+                            prData: snapshot.data,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Chart(
+                            prData: snapshot.data,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: ChartSubtitleWidget(),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 6,
-                      child: ContentTable(
-                        prData: snapshot.data,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 10,
-                      child: Chart(
-                        prData: snapshot.data,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: ChartSubtitleWidget(),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
-          },
+          }
         ),
       ),
     );
@@ -189,18 +192,18 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
-                value: prData['refusedPercent'],
-                title: 'Refuded' + ' ${prData['refusedPercent']}%',
+                value: prData['mergedPercent'],
+                title: 'Pull requests merged ${prData['mergedPercent']}%',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               PieChartSectionData(
-                color: getColor(value: prData['mergedPercent'],),
+                color: Colors.red,
                 titlePositionPercentageOffset: 0.5,
-                value: prData['mergedPercent'],
-                title: 'Merged' +  " ${prData['mergedPercent']}%",
+                value: 100 - prData['mergedPercent'],
+                title: ' ',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -209,11 +212,42 @@ class Chart extends StatelessWidget {
             ],
           ),
         ),
+
+        // child: PieChart(
+        //   PieChartData(
+        //     sectionsSpace: 1,
+        //     centerSpaceRadius: 0,
+        //     borderData: FlBorderData(
+        //       show: false,
+        //     ),
+        //     sections: [
+        //       PieChartSectionData(
+        //         color: Colors.indigo,
+        //         titlePositionPercentageOffset: 0.5,
+        //         value: prData['refusedPercent'],
+        //         title: 'Refused' + ' ${prData['refusedPercent']}%',
+        //         radius: MediaQuery.of(context).size.width * 0.45,
+        //         titleStyle: TextStyle(
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //       PieChartSectionData(
+        //         color: getColor(value: prData['mergedPercent'],),
+        //         titlePositionPercentageOffset: 0.5,
+        //         value: prData['mergedPercent'],
+        //         title: 'Merged' +  " ${prData['mergedPercent']}%",
+        //         radius: MediaQuery.of(context).size.width * 0.45,
+        //         titleStyle: TextStyle(
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
 }
-
 
 class ChartSubtitleWidget extends StatelessWidget {
   const ChartSubtitleWidget({
@@ -261,7 +295,8 @@ class ChartSubtitleWidget extends StatelessWidget {
                     flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Between 40% and 60% of merged Pull Requests'),
+                      child:
+                          Text('Between 40% and 60% of merged Pull Requests'),
                     ),
                   ),
                 ],
@@ -294,4 +329,3 @@ class ChartSubtitleWidget extends StatelessWidget {
     );
   }
 }
-

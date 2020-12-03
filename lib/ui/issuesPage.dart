@@ -1,17 +1,20 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/LoggedUser.dart';
-import 'package:gbdmobile/bloc/branchesRequest.bloc.dart';
+import 'package:gbdmobile/bloc/issuesRequest.bloc.dart';
 
-class BranchesPage extends StatefulWidget {
-final ValueNotifier<String> selectedRepository;  BranchesPage(this.selectedRepository);
+// ignore: must_be_immutable
+class IssuesPage extends StatefulWidget {
+  final ValueNotifier<String> selectedRepository;
+  IssuesPage(this.selectedRepository);
 
   @override
-  _BranchesPageState createState() => _BranchesPageState();
+  _IssuesPageState createState() => _IssuesPageState();
 }
 
-class _BranchesPageState extends State<BranchesPage> {
- 
+class _IssuesPageState extends State<IssuesPage> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +22,10 @@ class _BranchesPageState extends State<BranchesPage> {
       child: Scaffold(
         backgroundColor: Colors.grey[300],
         body: ValueListenableBuilder<String>(
-          valueListenable: widget.selectedRepository,
+         valueListenable: widget.selectedRepository,
           builder: (context, repo, _) {
             return FutureBuilder(
-              future: BranchesRequest.getBranches(
+              future: IssuesRequest.getIssues(
                   repository: repo, owner: LoggedUser.user.userName),
               builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
                 if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
@@ -38,13 +41,13 @@ class _BranchesPageState extends State<BranchesPage> {
                         Expanded(
                           flex: 3,
                           child: ContentTable(
-                            branchesData: snapshot.data,
+                            issuesData: snapshot.data,
                           ),
                         ),
                         Expanded(
                           flex: 10,
                           child: Chart(
-                            branchesData: snapshot.data,
+                            issuesData: snapshot.data,
                           ),
                         ),
                         Expanded(
@@ -89,7 +92,7 @@ class ChartSubtitleWidget extends StatelessWidget {
                     flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Below 40% of merged branches'),
+                      child: Text('Below 40% of closed issues'),
                     ),
                   ),
                 ],
@@ -110,7 +113,7 @@ class ChartSubtitleWidget extends StatelessWidget {
                     flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Between 40% and 60% of merged branches'),
+                      child: Text('Between 40% and 60% of closed issues'),
                     ),
                   ),
                 ],
@@ -131,7 +134,7 @@ class ChartSubtitleWidget extends StatelessWidget {
                     flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Above 60% of merged branches'),
+                      child: Text('Above 60% of closed issues'),
                     ),
                   ),
                 ],
@@ -144,9 +147,10 @@ class ChartSubtitleWidget extends StatelessWidget {
   }
 }
 
+
 class Chart extends StatelessWidget {
-  final Map<String, num> branchesData;
-  const Chart({@required this.branchesData});
+  final Map<String, num> issuesData;
+  const Chart({@required this.issuesData});
 
   MaterialColor getColor({@required num value}) {
     if (value <= 39)
@@ -171,11 +175,11 @@ class Chart extends StatelessWidget {
             ),
             sections: [
               PieChartSectionData(
-                color: getColor(value: branchesData['percentage_merged']),
+                color: getColor(value: issuesData['closedPercent']),
                 titlePositionPercentageOffset: 0.5,
-                value: branchesData['percentage_merged'].toDouble(),
-                title: 'Merged Branches' +
-                    ' ${branchesData['percentage_merged']}% ',
+                value: issuesData['closedPercent'],
+                title: 'Closed Issues' +
+                    '${issuesData['closedPercent']}% ',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -184,8 +188,9 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
-                value: 100 - branchesData['percentage_merged'].toDouble(),
-                title: '',
+                value: 100 - issuesData['closedPercent'],
+                title: 'Open Issues' +
+                    '${issuesData['openPercent']}%',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -200,8 +205,8 @@ class Chart extends StatelessWidget {
 }
 
 class ContentTable extends StatelessWidget {
-  final Map<String, num> branchesData;
-  const ContentTable({@required this.branchesData});
+  final Map<String, num> issuesData;
+  const ContentTable({@required this.issuesData});
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +226,7 @@ class ContentTable extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Active branches',
+                        'Open issues',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
@@ -235,13 +240,11 @@ class ContentTable extends StatelessWidget {
                     decoration: BoxDecoration(color: Colors.black),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Center(
                         child: Text(
-                          'Percentage of branches merged',
+                          'Closed issues',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                      ),
                     ),
                   ),
                 )
@@ -259,7 +262,7 @@ class ContentTable extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(color: Colors.grey),
                     child: Center(
-                      child: Text(branchesData['active_branches'].toString(),
+                      child: Text(issuesData['open'].toString(),
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
@@ -273,7 +276,7 @@ class ContentTable extends StatelessWidget {
                     decoration: BoxDecoration(color: Colors.grey),
                     child: Center(
                       child: Text(
-                          branchesData['percentage_merged'].toString() + '%',
+                          issuesData['closed'].toString(),
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
@@ -288,6 +291,7 @@ class ContentTable extends StatelessWidget {
     );
   }
 }
+
 
 class PageTitle extends StatelessWidget {
   const PageTitle({
@@ -304,7 +308,7 @@ class PageTitle extends StatelessWidget {
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(30)),
         child: Text(
-          'Branches',
+          'Issues',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),

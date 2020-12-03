@@ -17,10 +17,12 @@ class BranchesRequest {
     try {
       branchesMap["active_branches"] = parsed["active_branches"];
       branchesMap["percentage_merged"] = parsed["percentage_merged"];
+      if(branchesMap["percentage_merged"] == null)
+        branchesMap["percentage_merged"] = 0.0;
     } catch (err) {
-      print('(SYS) error:' + err.toString());
       return null;
     }
+    
     return branchesMap;
   }
 }

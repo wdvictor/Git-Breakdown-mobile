@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/LoggedUser.dart';
-import 'package:gbdmobile/bloc/commitsRequest.bloc.dart';
 
 
 class ReposList extends StatefulWidget {

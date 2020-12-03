@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/auth.bloc.dart';
-import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gbdmobile/routeGenerator.dart';
 
@@ -12,7 +11,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  Future _verifyUserLogged() {
+  void _verifyUserLogged() {
     FirebaseAuth auth = FirebaseAuth.instance;
     User user = auth.currentUser;
     WidgetsBinding.instance.addPostFrameCallback((_){
@@ -83,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20),
                                 child: Text(
-                                  'Login with Github',
+                                  'Login',
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
