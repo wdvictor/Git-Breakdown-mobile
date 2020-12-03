@@ -38,7 +38,8 @@ class _CommitsPageState extends State<CommitsPage> {
               repository: _repository, owner: LoggedUser.user.userName),
           builder:
               (context, AsyncSnapshot<Map<String, Map<String, num>>> snapshot) {
-            if (!snapshot.hasData) return CircularProgressIndicator();
+            if (!snapshot.hasData)
+              return Center(child: CircularProgressIndicator());
             return Container(
               child: Column(
                 children: [
