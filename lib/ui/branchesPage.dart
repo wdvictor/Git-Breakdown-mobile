@@ -156,7 +156,6 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(branchesData.toString());
     return Center(
       child: Container(
         constraints: BoxConstraints.expand(),

@@ -18,7 +18,6 @@ class BranchesRequest {
       branchesMap["active_branches"] = parsed["active_branches"];
       branchesMap["percentage_merged"] = parsed["percentage_merged"];
     } catch (err) {
-      print('(SYS) error:' + err.toString());
       return null;
     }
     return branchesMap;

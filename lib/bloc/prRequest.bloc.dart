@@ -45,9 +45,6 @@ class PRRequest {
 
       pullRequestMap["mergedPercent"] = mergedPercent;
     } catch (err) {
-      print(
-        '(SYS) error:' + err.toString(),
-      );
       return null;
     }
 

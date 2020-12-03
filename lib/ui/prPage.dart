@@ -25,7 +25,6 @@ class _PrPageState extends State<PrPage> {
               repository: _repository, owner: LoggedUser.user.userName),
           builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
             if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
-            print(snapshot.data);
             return SingleChildScrollView(
               child: Container(
                 height: MediaQuery.of(context).size.height * 1.3,
@@ -175,8 +174,6 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(prData.toString());
-
     return Center(
       child: Container(
         constraints: BoxConstraints.expand(),
