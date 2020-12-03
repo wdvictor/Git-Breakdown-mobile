@@ -8,7 +8,6 @@ class IssuesRequest {
       {@required String repository, @required String owner}) async {
     String token = LoggedUser.user.clientToken;
 
-
     Map<String, num> issuesMap = {};
     final String githubApi =
         "https://git-breakdown-mobile.web.app/issues?owner=$owner&repository=$repository&token=$token";
@@ -22,6 +21,10 @@ class IssuesRequest {
       issuesMap["closed"] = parsed["closed"];
       issuesMap["openPercent"] = parsed["openPercent"];
       issuesMap["closedPercent"] = parsed["closedPercent"];
+
+      if (issuesMap["openPercent"] == null) issuesMap["openPercent"] = 0.0;
+
+      if (issuesMap["closedPercent"] == null) issuesMap["closedPercent"] = 0.0;
     } catch (err) {
       return null;
     }

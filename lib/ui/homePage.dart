@@ -9,6 +9,7 @@ import 'package:gbdmobile/bloc/reposRequest.bloc.dart';
 import 'package:gbdmobile/routeGenerator.dart';
 import 'package:gbdmobile/ui/branchesPage.dart';
 import 'package:gbdmobile/ui/commitsPage.dart';
+import 'package:gbdmobile/ui/issuesPage.dart';
 import 'package:gbdmobile/ui/prPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       email: "Email do Usuário",
       displayName: "Nome do Usuário");
   List<String> _userRepos = [];
+  ValueNotifier<String> selectedRepository = ValueNotifier('');
   String _selectedRepository;
   TabController _tabController;
 
@@ -49,6 +51,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
            _userRepos = repos;
          });
     });
+
+   
   }
 
   _signOut() async{
@@ -65,7 +69,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         length: 4,
         vsync: this
     );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+      selectedRepository.value = _userRepos.first;
+      print('(SYS)addPostFrameCallback');
+    });
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +133,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         onChanged: (String newValue) {
                           setState(() {
                             _selectedRepository = newValue;
+                            selectedRepository.value = newValue;
+                            Navigator.pop(context);
+                            
                           });
                         },
                         items: _userRepos
@@ -160,14 +173,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          CommitsPage(_selectedRepository),
-          Container(),
-          BranchesPage(_selectedRepository),
-          PrPage(_selectedRepository)
-        ],
+      body: ValueListenableBuilder<String>(
+        valueListenable: selectedRepository,
+        builder: (context, repo, _) {
+          print('VALUE:' + selectedRepository.value);
+          return TabBarView(
+            controller: _tabController,
+            children: [
+              CommitsPage(repo),
+              IssuesPage(repo),
+              BranchesPage(repo),
+              PrPage(repo)
+            ],
+          );
+        }
       ),
     );
   }

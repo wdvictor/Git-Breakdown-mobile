@@ -141,7 +141,6 @@ class ChartSubtitleWidget extends StatelessWidget {
   }
 }
 
-
 class Chart extends StatelessWidget {
   final Map<String, num> branchesData;
   const Chart({@required this.branchesData});
@@ -157,6 +156,7 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(branchesData.toString());
     return Center(
       child: Container(
         constraints: BoxConstraints.expand(),
@@ -286,7 +286,6 @@ class ContentTable extends StatelessWidget {
     );
   }
 }
-
 
 class PageTitle extends StatelessWidget {
   const PageTitle({
