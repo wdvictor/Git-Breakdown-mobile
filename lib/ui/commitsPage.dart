@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:gbdmobile/bloc/commits.dart';
+import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/commitsRequest.bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class CommitsPage extends StatefulWidget {
+  String _repository;
+  CommitsPage(this._repository);
+
   @override
-  _CommitsPageState createState() => _CommitsPageState();
+  _CommitsPageState createState() => _CommitsPageState(this._repository);
 }
 
 class _CommitsPageState extends State<CommitsPage> {
+  String _repository;
+  _CommitsPageState(this._repository);
+
   ///Return Red to bad status, blue to medium status, and green to
   ///good status based on user percent
-  MaterialColor getColor({@required num avarage, @required num value}) {
-    if (value <= avarage) {
+  MaterialColor getColor({@required num average, @required num value}) {
+    if (value <= average) {
       return Colors.red;
-    } else if (value >= (avarage - avarage * 0.4) &&
-        value < avarage + avarage * 0.6) {
+    } else if (value >= (average - average * 0.4) &&
+        value < average + average * 0.6) {
       return Colors.blue;
     } else {
       return Colors.green;
@@ -29,11 +35,10 @@ class _CommitsPageState extends State<CommitsPage> {
         backgroundColor: Colors.grey[300],
         body: FutureBuilder(
           future: CommitsRequest.getCommits(
-              repository: '2019.2-Git-Breakdown', owner: 'fga-eps-mds'),
+              repository: _repository, owner: LoggedUser.user.userName),
           builder:
               (context, AsyncSnapshot<Map<String, Map<String, num>>> snapshot) {
             if (!snapshot.hasData) return CircularProgressIndicator();
-            print(snapshot.data);
             return Container(
               child: Column(
                 children: [
@@ -163,7 +168,7 @@ class _CommitsPageState extends State<CommitsPage> {
                                   PieChartSectionData(
                                     color: getColor(
                                         value: users.value['commits'],
-                                        avarage: snapshot.data['total']
+                                        average: snapshot.data['total']
                                                 ['avarageCommits']
                                             .toDouble()),
                                     titlePositionPercentageOffset: 0.8,

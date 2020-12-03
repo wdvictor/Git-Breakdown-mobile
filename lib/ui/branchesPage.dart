@@ -1,13 +1,20 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/branchesRequest.bloc.dart';
 
 class BranchesPage extends StatefulWidget {
+  String _repository;
+  BranchesPage(this._repository);
+
   @override
-  _BranchesPageState createState() => _BranchesPageState();
+  _BranchesPageState createState() => _BranchesPageState(this._repository);
 }
 
 class _BranchesPageState extends State<BranchesPage> {
+  String _repository;
+  _BranchesPageState(this._repository);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -15,7 +22,7 @@ class _BranchesPageState extends State<BranchesPage> {
         backgroundColor: Colors.grey[300],
         body: FutureBuilder(
           future: BranchesRequest.getBranches(
-              repository: '2019.2-Git-Breakdown', owner: 'fga-eps-mds'),
+              repository: _repository, owner: LoggedUser.user.userName),
           builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
             if (!snapshot.hasData) return CircularProgressIndicator();
 
@@ -164,7 +171,7 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: getColor(value: branchesData['percentage_merged']),
                 titlePositionPercentageOffset: 0.5,
-                value: branchesData['percentage_merged'],
+                value: branchesData['percentage_merged'].toDouble(),
                 title: 'Merged Branches' +
                     ' ${branchesData['percentage_merged']}% ',
                 radius: MediaQuery.of(context).size.width * 0.45,
@@ -175,7 +182,7 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
-                value: 100 - branchesData['percentage_merged'],
+                value: 100 - branchesData['percentage_merged'].toDouble(),
                 title: '',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(
