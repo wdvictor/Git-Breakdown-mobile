@@ -4,56 +4,60 @@ import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/prRequest.bloc.dart';
 
 class PrPage extends StatefulWidget {
-  final String _repository;
-  PrPage(this._repository);
+  final ValueNotifier<String> selectedRepository;
+  PrPage(this.selectedRepository);
 
   @override
-  _PrPageState createState() => _PrPageState(this._repository);
+  _PrPageState createState() => _PrPageState();
 }
 
 class _PrPageState extends State<PrPage> {
-  String _repository;
-  _PrPageState(this._repository);
+
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[300],
-        body: FutureBuilder(
-          future: PRRequest.getPRs(
-              repository: _repository, owner: LoggedUser.user.userName),
-          builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
-            if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
-            return SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 1.3,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: PageTitle(),
+        body: ValueListenableBuilder<String>(
+         valueListenable: widget.selectedRepository,
+          builder: (context, repo, _) {
+            return FutureBuilder(
+              future: PRRequest.getPRs(
+                  repository: repo, owner: LoggedUser.user.userName),
+              builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
+                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+                return SingleChildScrollView(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 1.3,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: PageTitle(),
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: ContentTable(
+                            prData: snapshot.data,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Chart(
+                            prData: snapshot.data,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: ChartSubtitleWidget(),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 6,
-                      child: ContentTable(
-                        prData: snapshot.data,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 10,
-                      child: Chart(
-                        prData: snapshot.data,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: ChartSubtitleWidget(),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
-          },
+          }
         ),
       ),
     );

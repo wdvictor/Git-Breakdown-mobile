@@ -4,57 +4,60 @@ import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/branchesRequest.bloc.dart';
 
 class BranchesPage extends StatefulWidget {
-  final String _repository;
-  BranchesPage(this._repository);
+final ValueNotifier<String> selectedRepository;  BranchesPage(this.selectedRepository);
 
   @override
-  _BranchesPageState createState() => _BranchesPageState(this._repository);
+  _BranchesPageState createState() => _BranchesPageState();
 }
 
 class _BranchesPageState extends State<BranchesPage> {
-  String _repository;
-  _BranchesPageState(this._repository);
+ 
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[300],
-        body: FutureBuilder(
-          future: BranchesRequest.getBranches(
-              repository: _repository, owner: LoggedUser.user.userName),
-          builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
-            if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        body: ValueListenableBuilder<String>(
+          valueListenable: widget.selectedRepository,
+          builder: (context, repo, _) {
+            return FutureBuilder(
+              future: BranchesRequest.getBranches(
+                  repository: repo, owner: LoggedUser.user.userName),
+              builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
+                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
 
-            return SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 1.1,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: PageTitle(),
+                return SingleChildScrollView(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 1.1,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: PageTitle(),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: ContentTable(
+                            branchesData: snapshot.data,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Chart(
+                            branchesData: snapshot.data,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: ChartSubtitleWidget(),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: ContentTable(
-                        branchesData: snapshot.data,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 10,
-                      child: Chart(
-                        branchesData: snapshot.data,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: ChartSubtitleWidget(),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
-          },
+          }
         ),
       ),
     );

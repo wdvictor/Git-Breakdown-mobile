@@ -1,61 +1,66 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdmobile/bloc/LoggedUser.dart';
 import 'package:gbdmobile/bloc/issuesRequest.bloc.dart';
 
 // ignore: must_be_immutable
 class IssuesPage extends StatefulWidget {
-  String _repository;
-  IssuesPage(this._repository);
+  final ValueNotifier<String> selectedRepository;
+  IssuesPage(this.selectedRepository);
 
   @override
-  _IssuesPageState createState() => _IssuesPageState(this._repository);
+  _IssuesPageState createState() => _IssuesPageState();
 }
 
 class _IssuesPageState extends State<IssuesPage> {
-  String _repository;
-  _IssuesPageState(this._repository);
+
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[300],
-        body: FutureBuilder(
-          future: IssuesRequest.getIssues(
-              repository: _repository, owner: LoggedUser.user.userName),
-          builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
-            if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        body: ValueListenableBuilder<String>(
+         valueListenable: widget.selectedRepository,
+          builder: (context, repo, _) {
+            return FutureBuilder(
+              future: IssuesRequest.getIssues(
+                  repository: repo, owner: LoggedUser.user.userName),
+              builder: (context, AsyncSnapshot<Map<String, num>> snapshot) {
+                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
 
-            return SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 1.1,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: PageTitle(),
+                return SingleChildScrollView(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 1.1,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: PageTitle(),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: ContentTable(
+                            issuesData: snapshot.data,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Chart(
+                            issuesData: snapshot.data,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: ChartSubtitleWidget(),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: ContentTable(
-                        issuesData: snapshot.data,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 10,
-                      child: Chart(
-                        issuesData: snapshot.data,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: ChartSubtitleWidget(),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
-          },
+          }
         ),
       ),
     );

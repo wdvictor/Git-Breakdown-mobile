@@ -66,20 +66,14 @@ class _HomePageState extends State<HomePage>
     Navigator.pushReplacementNamed(context, RouteGenerator.LOGIN_ROUTE);
   }
 
-  bool _update = false;
+
   @override
   void initState() {
     super.initState();
     getInitialData();
     _tabController = TabController(length: 5, vsync: this);
 
-    selectedRepository.addListener(() {
-      
-      _tabController.animateTo(0);
-      setState(() {
-        _update = !_update;
-      });
-    });
+   
   }
 
   @override
@@ -181,15 +175,15 @@ class _HomePageState extends State<HomePage>
       body: ValueListenableBuilder<String>(
         valueListenable: selectedRepository,
         builder: (context, repo, _) {
-          print('new repo: $repo');
+          
           return TabBarView(
             controller: _tabController,
             children: [
               InitPage(),
               CommitsPage(selectedRepository),
-              IssuesPage(repo),
-              BranchesPage(repo),
-              PrPage(repo)
+              IssuesPage(selectedRepository),
+              BranchesPage(selectedRepository),
+              PrPage(selectedRepository)
             ],
           );
         },
