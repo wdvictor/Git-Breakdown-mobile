@@ -11,7 +11,6 @@ import 'package:gbdmobile/ui/branchesPage.dart';
 import 'package:gbdmobile/ui/commitsPage.dart';
 import 'package:gbdmobile/ui/issuesPage.dart';
 import 'package:gbdmobile/ui/prPage.dart';
-
 import 'InitialPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  final _metrics = ["home","Commits", "Issues", "Branches", "Pull Requests"];
+  final _metrics = ["home", "Commits", "Issues", "Branches", "Pull Requests"];
   GbdUser _user = GbdUser(
       userName: "username",
       clientToken: "token",
@@ -67,6 +66,7 @@ class _HomePageState extends State<HomePage>
     Navigator.pushReplacementNamed(context, RouteGenerator.LOGIN_ROUTE);
   }
 
+  bool _update = false;
   @override
   void initState() {
     super.initState();
@@ -74,7 +74,11 @@ class _HomePageState extends State<HomePage>
     _tabController = TabController(length: 5, vsync: this);
 
     selectedRepository.addListener(() {
+      
       _tabController.animateTo(0);
+      setState(() {
+        _update = !_update;
+      });
     });
   }
 
@@ -134,6 +138,7 @@ class _HomePageState extends State<HomePage>
                           () {
                             _selectedRepository = newValue;
                             selectedRepository.value = newValue;
+
                             Navigator.pop(context);
                           },
                         );
@@ -176,11 +181,12 @@ class _HomePageState extends State<HomePage>
       body: ValueListenableBuilder<String>(
         valueListenable: selectedRepository,
         builder: (context, repo, _) {
+          print('new repo: $repo');
           return TabBarView(
             controller: _tabController,
             children: [
               InitPage(),
-              CommitsPage(repo),
+              CommitsPage(selectedRepository),
               IssuesPage(repo),
               BranchesPage(repo),
               PrPage(repo)
