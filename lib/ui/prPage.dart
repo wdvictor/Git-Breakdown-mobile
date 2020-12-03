@@ -177,6 +177,7 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
      print(prData.toString());
+    
     return Center(
       child: Container(
         constraints: BoxConstraints.expand(),
@@ -191,7 +192,7 @@ class Chart extends StatelessWidget {
               PieChartSectionData(
                 color: Colors.indigo,
                 titlePositionPercentageOffset: 0.5,
-                value: prData['refusedPercent'].toDouble(),
+                value: prData['refusedPercent'],
                 title: 'Refused' + ' ${prData['refusedPercent']}%',
                 radius: MediaQuery.of(context).size.width * 0.45,
                 titleStyle: TextStyle(

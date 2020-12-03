@@ -21,7 +21,7 @@ class PRRequest {
       pullRequestMap["refused"] = parsed["refused"];
       pullRequestMap["merged"] = parsed["merged"];
       if (parsed["refused_percent"] == null) {
-        pullRequestMap["refusedPercent"] = 0;
+        pullRequestMap["refusedPercent"] = 0.0;
       } else {
         try {
           pullRequestMap["refusedPercent"] = double.tryParse(
